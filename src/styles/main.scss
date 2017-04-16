@@ -1,0 +1,95 @@
+@import '~styles/common';
+
+$bg-color: #1d2c4d;
+$form-bg-color: #f5f5f5;
+$font-color: #000;
+
+body {
+  background-color: $bg-color;
+  color: $font-color;
+}
+
+html,
+body {
+  height: 100%;
+
+}
+
+.hide {
+  display: none;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.map-block {
+  height: 100%;
+  position: fixed;
+  width: 100%;
+}
+
+.collapse-btn {
+  background-color: $form-bg-color;
+  border: 1px solid;
+  float: left;
+  height: 50px;
+  position: relative;
+  text-align: center;
+  top: 100px;
+  width: 50px;
+}
+
+$data-block-width: 380px;
+
+.collapsed {
+  margin-left: -$data-block-width;
+}
+
+.data-panel {
+  float: left;
+  transition: margin-left 1s;
+  width: $data-block-width;
+}
+
+.data-block {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+
+  .datatable-block {
+    height: calc(100% - 45px);
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    .table {
+      margin: 0;
+    }
+
+    th {
+      min-width: 114px;
+    }
+  }
+}
+
+.arrow-up::after {
+  content: '\21d1';
+}
+
+.arrow-down::after {
+  content: '\21d3';
+}
+
+.panel {
+  background-color: $form-bg-color;
+  height: 100%;
+}
+
+.title:not(.is-spaced) + .subtitle {
+  margin-top: 0;
+}
+
+.title:not(:last-child),
+.subtitle:not(:last-child) {
+  margin-bottom: 0;
+}

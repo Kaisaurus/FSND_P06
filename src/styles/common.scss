@@ -1,0 +1,18 @@
+@import '~bulma';
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab|Titillium+Web');
+
+$heading-font: 'Roboto Slab', serif;
+$main-font: 'Titillium Web', sans-serif;
+
+p,
+li {
+  font-family: $main-font;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: $heading-font;
+  font-weight: normal;
+}
