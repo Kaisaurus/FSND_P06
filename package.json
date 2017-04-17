@@ -6,7 +6,7 @@
   "author": "Kaisaurus <kaigotoh@gmail.com>",
   "license": "MIT",
   "babel": {
-     "presets": ["env"]
+     "presets": ["ES2015"]
   },
   "scripts": {
     "watch": "node_modules/.bin/webpack-dev-server --open"
