@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "Kaisaurus <kaigotoh@gmail.com>",
   "license": "MIT",
+  "babel": {
+     "presets": ["env"]
+  },
   "scripts": {
     "watch": "node_modules/.bin/webpack-dev-server --open"
   },

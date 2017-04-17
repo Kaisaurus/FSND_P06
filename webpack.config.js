@@ -42,7 +42,7 @@ module.exports = {
         // the babel loader will translate the ES6/ES2015 syntax to a syntax
         // that works in all browsers
         test: /\.js$/,
-        loader: 'babel-loader?presets[]=es2015',
+        loader: 'babel-loader',
         include: path.resolve(__dirname, 'src/js'),
       },
     ],
