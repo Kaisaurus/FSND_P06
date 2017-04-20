@@ -4,6 +4,7 @@ import refugeeCampAppHtml from 'js/refugeeCampAppHtml';
 
 class ViewModel {
   constructor() {
+    this.refugeeCampList = ko.observableArray();
     this.refugeeCampMap = new RefugeeCampMap('map');
     this.refugeeCampMap.init()
     .then((refugeeCampData) => {
@@ -11,7 +12,6 @@ class ViewModel {
         this.refugeeCampList.push(val);
       });
     });
-    this.refugeeCampList = ko.observableArray();
     this.sortType = ko.observable('population');
     this.countryFilter = ko.observable('');
     this.orderReversed = ko.observable(false);
@@ -28,7 +28,7 @@ class ViewModel {
       list = ko.utils.arrayFilter(this.refugeeCampList(), (i) => {
         // this filters the list with the text input
         if (i.country.toLowerCase().includes(this.countryFilter().toLowerCase())) {
-          return i;
+          return true;
         }
         return false;
       });

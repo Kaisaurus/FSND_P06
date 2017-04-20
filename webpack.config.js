@@ -3,7 +3,8 @@ const path = require('path');
 // const is the new syntax for a var that doesn't change
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // this plugin refreshes css without refreshing the whole page.
-
+const isProduction = process.env.NODE_ENV === 'production';
+const processCss = isProduction ? '?minmize' : '';
 
 module.exports = {
 
@@ -11,7 +12,6 @@ module.exports = {
     // the entry are the source files from which the app will compile
     // all files used are defined here or the 'import' section of these files
     app: path.join(__dirname, 'src/js', 'app.js'),
-    about: path.join(__dirname, 'src/js', 'about.js'),
   },
 
   output: {
@@ -29,9 +29,9 @@ module.exports = {
       // webpack only reads javascript, these loaders help it read other files
       {
         test: /\.scss$/,
-        loaders: [
+        use: [
           'style-loader',
-          'css-loader',
+          `css-loader${processCss}`,
           'resolve-url-loader',
           // resolves any url() stuff in the css
           'sass-loader?sourceMap',
@@ -59,30 +59,29 @@ module.exports = {
     // it makes sure the line numbers will correspond with the src line numbers
   },
 
+
   devtool: 'cheap-module-eval-source-map',
   // this makes js errors a bit more readable in the browser developer tools
   // however there is some speed loss in the building
 
-  plugins: [
-    // the HtmlWebpackPlugin is used to create html files
+  plugins: isProduction ?
+  [
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'src/html', 'index.html'),
+      hash: true,
+      chunks: ['app'],
+    }),
+    (new webpack.optimize.UglifyJsPlugin({ minimize: true })),
+  ]
+  : [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/html', 'index.html'),
       // in the template you can see both are based on index.html
       // however the output is very different because of the javascript
-      filename: 'index.html', // not really needed because index is default
       hash: true,
       chunks: ['app'],
       // chunks specifies which javascript files are used
-      inject: 'head',
-      // this tells it to inject the js in the head, default is at the end of the body
     }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src/html', 'index.html'),
-      filename: 'about.html',
-      hash: true,
-      chunks: ['about'],
-    }),
-
     // this line activates the HotModuleReplacementPlugin
     new webpack.HotModuleReplacementPlugin(),
   ],
