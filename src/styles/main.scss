@@ -29,6 +29,8 @@ body {
   width: 100%;
 }
 
+$collapse-btn-width: 50px;
+
 .collapse-btn {
   background-color: $form-bg-color;
   border: 1px solid;
@@ -37,19 +39,34 @@ body {
   position: relative;
   text-align: center;
   top: 100px;
-  width: 50px;
+  width: $collapse-btn-width;
 }
 
-$data-block-width: 380px;
 
-.collapsed {
-  margin-left: -$data-block-width;
+
+@media screen and (max-width: 768px) {
+  .data-panel {
+    width: 380px;
+  }
+
+  .collapsed {
+    margin-left: -380px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .data-panel {
+    width: 580px;
+  }
+
+  .collapsed {
+    margin-left: -580px;
+  }
 }
 
 .data-panel {
   float: left;
   transition: margin-left 1s;
-  width: $data-block-width;
 }
 
 .data-block {

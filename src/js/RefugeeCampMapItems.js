@@ -10,6 +10,7 @@ export default class RefugeeCampMapItems {
     this._mapItemType = 'markers';
   }
 
+// this is just a function to create circles later
   getCircle(population) {
     return {
       path: this._googleApi.maps.SymbolPath.CIRCLE,
@@ -107,7 +108,12 @@ export default class RefugeeCampMapItems {
 
   campClicked(refugeeCamp) {
     const matchedItem = this[`_${this._mapItemType}`].find((i) => refugeeCamp.id === i._id);
+    this.infoWindow.setPosition(matchedItem.getCenter());
     this.infoWindow.setContent(matchedItem._infoWindowContent);
-    this.infoWindow.open(this._map, matchedItem);
+    this.infoWindow.open(this._map);
+    if (this._mapItemType === 'markers') {
+      matchedItem.setAnimation(this._googleApi.maps.Animation.BOUNCE);
+      window.setTimeout(() => matchedItem.setAnimation(null), 2000);
+    }
   }
 }

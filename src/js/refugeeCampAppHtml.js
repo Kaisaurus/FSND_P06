@@ -25,27 +25,27 @@ export default () => `
       <table class="table is-bordered is-striped is-narrow">
         <thead>
           <tr>
+            <th><a data-bind="
+            click: (data, event) => sortClicked('country'),
+            css: {
+              'arrow-down': sortType() == 'country' && !orderReversed(),
+              'arrow-up': sortType() == 'country' && orderReversed()
+            }">
+            Country </a></th>
             <th> Location </th>
             <th><a data-bind="
-              click: (data, event) => sortClicked('country'),
-              css: {
-                'arrow-down': sortType() == 'country' && !orderReversed(),
-                'arrow-up': sortType() == 'country' && orderReversed()
-              }">
-              Country </a></th>
-            <th><a data-bind="
-              click: (data, event) => sortClicked('population'),
-              css: {
-                'arrow-down': sortType() == 'population' && !orderReversed(),
-                'arrow-up': sortType() == 'population' && orderReversed()
-              }">
-              Population </a></th>
+            click: (data, event) => sortClicked('population'),
+            css: {
+              'arrow-down': sortType() == 'population' && !orderReversed(),
+              'arrow-up': sortType() == 'population' && orderReversed()
+            }">
+            Population </a></th>
           </tr>
         <thead>
         <tbody data-bind="foreach: filteredRefugeeCampList">
           <tr class="clickable" data-bind="click: $parent.refugeeCampClicked.bind($parent)">
-            <td data-bind="text: name">&nbsp;</td>
             <td data-bind="text: country">&nbsp;</td>
+            <td data-bind="text: name">&nbsp;</td>
             <td data-bind="text: Number(population).toLocaleString()">&nbsp;</td>
           </tr>
         </tbody>
