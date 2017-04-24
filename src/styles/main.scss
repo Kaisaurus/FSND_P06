@@ -16,11 +16,15 @@ body {
 }
 
 .hide {
-  display: none;
+  visibility: hidden;
 }
 
 .clickable {
   cursor: pointer;
+}
+
+h4 {
+  color: $form-bg-color !important;
 }
 
 .map-block {

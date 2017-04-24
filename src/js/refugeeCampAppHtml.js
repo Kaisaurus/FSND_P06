@@ -1,7 +1,7 @@
 import 'styles/main';
 
 export default () => `
-<div class="data-block">
+<div class="data-block hide">
   <nav class="panel data-panel" data-bind="
     css: {'collapsed': dataPanelCollapsed }">
     <div class="dataform-block">
@@ -49,7 +49,7 @@ export default () => `
           </tr>
         <thead>
         <tbody data-bind="foreach: filteredRefugeeCampList">
-          <tr class="clickable" data-bind="click: openInfoWindow()">
+          <tr class="clickable" data-bind="click: openInfoWindow">
             <td data-bind="text: _data.country">&nbsp;</td>
             <td data-bind="text: _data.name">&nbsp;</td>
             <td data-bind="text: Number(_data.population).toLocaleString()">&nbsp;</td>
@@ -66,7 +66,7 @@ export default () => `
 
   <div id="map" class="map-block">
     <span class="icon container hero-body has-text-centered">
-      Loading...
+      <h4>Loading...</h4>
       <span class="button is-loading is-outlined">
       </span>
     </span>

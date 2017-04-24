@@ -80,6 +80,7 @@ export default class RefugeeCampMapItem {
   }
 
   openInfoWindow() {
+    console.log('called');
     this._infoWindow.setContent(this._infoWindowContent);
     switch (this._mapItemType()) {
       case 'marker':

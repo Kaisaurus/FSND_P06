@@ -63,10 +63,6 @@ class ViewModel {
     return list;
   }
 
-  refugeeCampClicked(data) {
-    this.refugeeCampMap.campClicked(data);
-  }
-
   sortClicked(key) {
     if (this.sortType() !== key) {
       this.orderReversed(false);
@@ -84,5 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
   new RefugeeCampMap('map').init()
   .then((refugeeCampMap) => {
     ko.applyBindings(new ViewModel(refugeeCampMap));
-  });
+  })
+  .then(() =>
+    // this is not done through an observable because it needs to be hidden before applyBindings
+    document.getElementsByClassName('data-block')[0].classList.remove('hide')
+  );
 });
