@@ -44,7 +44,11 @@ $collapse-btn-width: 50px;
 
 
 
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 450px) {
+  .table th {
+    min-width: 114px;
+  }
+
   .data-panel {
     width: 380px;
   }
@@ -54,13 +58,21 @@ $collapse-btn-width: 50px;
   }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (max-width: 450px) {
+  .table th {
+    width: auto;
+  }
+
+  .panel {
+    font-size: .8rem;
+  }
+
   .data-panel {
-    width: 580px;
+    width: 250px;
   }
 
   .collapsed {
-    margin-left: -580px;
+    margin-left: -250px;
   }
 }
 
@@ -75,7 +87,7 @@ $collapse-btn-width: 50px;
   z-index: 1;
 
   .datatable-block {
-    height: calc(100% - 45px);
+    height: calc(100% - 80px);
     overflow-x: hidden;
     overflow-y: scroll;
 
@@ -83,9 +95,6 @@ $collapse-btn-width: 50px;
       margin: 0;
     }
 
-    th {
-      min-width: 114px;
-    }
   }
 }
 

@@ -16,10 +16,10 @@ export default () => `
       </div>
     </div>
     <p class="panel-tabs">
-      <a data-bind="click: () => mapType('markers'),
-        css: {'is-active': mapType() == 'markers'}">Markers</a>
-      <a data-bind="click: () => mapType('circles'),
-        css: {'is-active': mapType() == 'circles'}">Circles</a>
+      <a data-bind="click: () => mapItemType('marker'),
+        css: {'is-active': mapItemType() == 'marker'}">Markers</a>
+      <a data-bind="click: () => mapItemType('circle'),
+        css: {'is-active': mapItemType() == 'circle'}">Circles</a>
     </p>
     <div class="datatable-block">
       <table class="table is-bordered is-striped is-narrow">
@@ -32,7 +32,13 @@ export default () => `
               'arrow-up': sortType() == 'country' && orderReversed()
             }">
             Country </a></th>
-            <th> Location </th>
+            <th><a data-bind="
+            click: (data, event) => sortClicked('instance_id'),
+            css: {
+              'arrow-down': sortType() == 'location' && !orderReversed(),
+              'arrow-up': sortType() == 'location' && orderReversed()
+            }">
+            Location </a></th>
             <th><a data-bind="
             click: (data, event) => sortClicked('population'),
             css: {
@@ -43,10 +49,10 @@ export default () => `
           </tr>
         <thead>
         <tbody data-bind="foreach: filteredRefugeeCampList">
-          <tr class="clickable" data-bind="click: $parent.refugeeCampClicked.bind($parent)">
-            <td data-bind="text: country">&nbsp;</td>
-            <td data-bind="text: name">&nbsp;</td>
-            <td data-bind="text: Number(population).toLocaleString()">&nbsp;</td>
+          <tr class="clickable" data-bind="click: openInfoWindow()">
+            <td data-bind="text: _data.country">&nbsp;</td>
+            <td data-bind="text: _data.name">&nbsp;</td>
+            <td data-bind="text: Number(_data.population).toLocaleString()">&nbsp;</td>
           </tr>
         </tbody>
       </table>

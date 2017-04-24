@@ -3,39 +3,29 @@ import RefugeeCampMap from 'js/RefugeeCampMap';
 import refugeeCampAppHtml from 'js/refugeeCampAppHtml';
 
 class ViewModel {
-  constructor() {
-    this.refugeeCampList = ko.observableArray();
-    this.refugeeCampMap = new RefugeeCampMap('map');
-    this.refugeeCampMap.init()
-    .then((refugeeCampData) => {
-      refugeeCampData.forEach((val) => {
-        this.refugeeCampList.push(val);
-      });
-    });
+  constructor(refugeeCampMap) {
+    this.refugeeCampMap = refugeeCampMap;
+    this.mapItemType = ko.observable('marker');
+    // Map Items are created here so the mapItemType observable can be passed
+    this.refugeeCampList = ko.observableArray(this.refugeeCampMap.createMapItems(this.mapItemType));
     this.sortType = ko.observable('population');
     this.countryFilter = ko.observable('');
     this.orderReversed = ko.observable(false);
-    this.mapType = ko.observable('markers');
     this.dataPanelCollapsed = ko.observable(false);
-    this.mapType.subscribe((mapType) => {
-      // this makes sure the map items get updated when the map type changes
-      this.refugeeCampMap.updateMapItems(this.filteredRefugeeCampList(), mapType);
-    });
     this.filteredRefugeeCampList = ko.pureComputed(() => {
       // this computes the refugee camp list to apply the filter with the typed text
       let list = [];
 
       list = ko.utils.arrayFilter(this.refugeeCampList(), (i) => {
         // this filters the list with the text input
-        if (i.country.toLowerCase().includes(this.countryFilter().toLowerCase())) {
+        if (i._data.country.toLowerCase().includes(this.countryFilter().toLowerCase())) {
+          i.updateVisibility(true);
           return true;
         }
+        i.updateVisibility(false);
         return false;
       });
 
-      if (this.refugeeCampMap.mapLoaded()) {
-        this.refugeeCampMap.updateMapItems(list, this.mapType());
-      }
       list = this.sortRefugeeCampList(list);
 
       if (this.orderReversed()) {
@@ -56,16 +46,16 @@ class ViewModel {
 
   sortRefugeeCampList(list) {
     switch (this.sortType()) {
-      case 'country':
+      case 'country' || 'location':
         list.sort((a, b) => {
-          if (a[this.sortType()] === b[this.sortType()]) {
+          if (a._data[this.sortType()] === b._data[this.sortType()]) {
             return 0;
           }
-          return a[this.sortType()] < b[this.sortType()] ? -1 : 1;
+          return a._data[this.sortType()] < b._data[this.sortType()] ? -1 : 1;
         });
         break;
       case 'population':
-        list.sort((a, b) => b[this.sortType()] - a[this.sortType()]);
+        list.sort((a, b) => b._data[this.sortType()] - a._data[this.sortType()]);
         break;
       default:
         break;
@@ -91,5 +81,8 @@ class ViewModel {
 
 document.addEventListener('DOMContentLoaded', () => {
   document.body.innerHTML = refugeeCampAppHtml();
-  ko.applyBindings(new ViewModel());
+  new RefugeeCampMap('map').init()
+  .then((refugeeCampMap) => {
+    ko.applyBindings(new ViewModel(refugeeCampMap));
+  });
 });

@@ -1,29 +1,27 @@
 import googleMapsApiLoader from 'google-maps-api-loader';
 import { mapsStyle } from 'js/mapsStyle';
-import RefugeeCampMapItems from 'js/RefugeeCampMapItems';
+import RefugeeCampMapItem from 'js/RefugeeCampMapItem';
 import Notification from 'js/Notification';
 
 export default class RefugeeCampMap {
-  constructor(mapElementId) {
+  constructor(mapElementId, mapItemType) {
     this._notification = new Notification();
     this._notification.init();
     this._mapId = mapElementId;
-    this._mapLoaded = false;
-    this._mapItemType = 'markers';
-    this._markers = [];
-    this._circles = [];
+    this._mapItemType = mapItemType;
+    this._mapItems = [];
   }
 
 // init fetches the data and builds the google map
 // it waits for the fetch data to complete before it returns
   async init() {
     try {
-      this.buildMap(this._mapId);
       await this.fetchData();
+      await this.buildMap(this._mapId);
     } catch (error) {
       this._notification.logError(error, 'RefugeeCampMap.init()');
     } finally {
-      return this._data;
+      return this;
     }
   }
 
@@ -40,20 +38,11 @@ export default class RefugeeCampMap {
         center: { lat: Number(this._data[0].latitude), lng: Number(this._data[0].longitude) },
         styles: mapsStyle,
       });
-      this._mapLoaded = true;
-      this._refugeeCampMapItems = new RefugeeCampMapItems(this._googleApi, this._map);
-      this._refugeeCampMapItems.createMapItems(this._data, this._mapItemType);
+      this._infoWindow = new this._googleApi.maps.InfoWindow({
+        content: 'Content loading ...',
+      });
     })
-    .catch((error) => Notification.logError(error, 'RefugeeCampMap.buildMap'));
-  }
-
-
-  updateMapItems(list, type) {
-    if (this._refugeeCampMapItems) {
-      this._refugeeCampMapItems.updateMapItems(list, type);
-    } else {
-      this._notification.notify('Please wait for the map to load.');
-    }
+    .catch((error) => this._notification.logError(error, 'RefugeeCampMap.buildMap'));
   }
 
 // fetches data from unhr.org api
@@ -82,24 +71,24 @@ export default class RefugeeCampMap {
       dataObject.population_date = newestPopulationData.updated_at;
       dataObject.population_url = newestPopulationData.url;
       dataObject.population = newestPopulationData.value;
-      dataObject.visible = true; // setting a default visible property for filtering
       dataObject.id = i;
       this._data.push(dataObject);
     }
     return this._data;
   }
 
-  campClicked(refugeeCamp) {
-    if (this._mapLoaded) {
-      this._refugeeCampMapItems.campClicked(refugeeCamp);
-    } else {
-      this._notification.notify(
-        'Please wait for the map to load before we can show location data.');
-    }
-  }
-
-  mapLoaded() {
-    return this._mapLoaded;
+  createMapItems(mapItemType) {
+    this._refugeeCampMapItems = [];
+    this._data.forEach((item) => {
+      const refugeeCampMapItem = new RefugeeCampMapItem(
+        this._googleApi,
+        this._map,
+        this._infoWindow,
+        this._notification);
+      refugeeCampMapItem.init(item, mapItemType);
+      this._refugeeCampMapItems.push(refugeeCampMapItem);
+    });
+    return this._refugeeCampMapItems;
   }
 
 }

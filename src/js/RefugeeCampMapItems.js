@@ -7,6 +7,7 @@ export default class RefugeeCampMapItems {
     });
     this._markers = [];
     this._circles = [];
+    this._mapItems = [];
     this._mapItemType = 'markers';
   }
 
